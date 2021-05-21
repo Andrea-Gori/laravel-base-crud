@@ -14,7 +14,8 @@ class ComicController extends Controller
      */
     public function index()
     {
-        //
+        $comics = Comic::all();
+        return view('comics.index', compact('comics'));
     }
 
     /**
@@ -24,7 +25,7 @@ class ComicController extends Controller
      */
     public function create()
     {
-        //
+        return view('comics.create');
     }
 
     /**
@@ -35,7 +36,21 @@ class ComicController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+
+        $newComic = new Comic();
+            $newComic->title = $data['title'];
+            $newComic->thumb = $data['thumb'];
+            $newComic->description = $data['description'];
+            $newComic->price = $data['price'];
+            $newComic->series = $data['series'];
+            $newComic->sale_date = $data['sale_date'];
+            $newComic->type = $data['type'];
+            $newComic->save();
+
+        $comic = Comic::orderBy('id', 'desc')->first();
+        return redirect()->route('comics.index');
+
     }
 
     /**
@@ -46,7 +61,7 @@ class ComicController extends Controller
      */
     public function show(Comic $comic)
     {
-        //
+        return view('comics.show', compact('comic'));
     }
 
     /**
@@ -57,7 +72,7 @@ class ComicController extends Controller
      */
     public function edit(Comic $comic)
     {
-        //
+        return view('comics.edit', compact('comic'));
     }
 
     /**
@@ -69,7 +84,12 @@ class ComicController extends Controller
      */
     public function update(Request $request, Comic $comic)
     {
-        //
+
+        
+        $data = $request->all();
+        $comic->update($data);
+
+        return redirect()->route('comics.show', compact('comic'));
     }
 
     /**
@@ -80,6 +100,7 @@ class ComicController extends Controller
      */
     public function destroy(Comic $comic)
     {
-        //
+        $comic->delete();
+        return redirect()->route('comics.index');
     }
 }
