@@ -3,6 +3,18 @@
 @section('main')
 
 <main>
+  @if ($errors->any())
+    <div class="alert">
+      <ul>
+        @foreach($errors->all() as $error)
+          <li>{{ $error }}</li>
+        @endforeach
+      </ul>
+
+    </div>
+  @endif
+
+
   <form action="{{route('comics.update',['comic' => $comic->id])}}" method="post">
     @csrf
     @method('PUT')
